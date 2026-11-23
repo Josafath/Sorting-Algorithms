@@ -1,0 +1,29 @@
+name: v2 tests
+
+on:
+  # Pull requests are tested once; master is tested again after the merge
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: '21'
+      # Each system runs its own script, so both scripts stay working
+      - name: Run tests (macOS, Linux)
+        if: runner.os != 'Windows'
+        run: ./v2/test.sh
+      - name: Run tests (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: v2\test.bat

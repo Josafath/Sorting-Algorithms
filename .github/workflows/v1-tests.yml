@@ -1,7 +1,9 @@
 name: v1 tests
 
 on:
+  # Pull requests are tested once; master is tested again after the merge
   push:
+    branches: [master]
   pull_request:
 
 jobs:
