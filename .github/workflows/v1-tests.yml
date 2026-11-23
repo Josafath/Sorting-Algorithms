@@ -18,12 +18,15 @@ jobs:
         shell: bash
         working-directory: v1
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: zulu
           java-version: ${{ matrix.java }}
       - name: Compile
-        run: javac -encoding UTF-8 -d out src/Algorithms/*.java src/Menu/*.java test/tests/*.java
+        # javac 8 does not create the -d folder by itself (javac 9+ does)
+        run: |
+          mkdir -p out
+          javac -encoding UTF-8 -d out src/Algorithms/*.java src/Menu/*.java test/tests/*.java
       - name: Run tests
         run: java -Djava.awt.headless=true -cp out tests.SortingTests

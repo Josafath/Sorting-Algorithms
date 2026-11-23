@@ -59,6 +59,7 @@ Sorting runs in the background, so the window does not freeze with big files.
 Windows (Command Prompt or PowerShell):
 
 ```bat
+mkdir out
 javac -encoding UTF-8 -d out src\Algorithms\*.java src\Menu\*.java
 java -cp out Menu.Principal
 ```
@@ -66,9 +67,12 @@ java -cp out Menu.Principal
 macOS and Linux:
 
 ```bash
+mkdir -p out
 javac -encoding UTF-8 -d out src/Algorithms/*.java src/Menu/*.java
 java -cp out Menu.Principal
 ```
+
+(`mkdir` is needed with Java 8, whose `javac` does not create the `out` folder; on Windows it only warns if the folder already exists.)
 
 ### Tests
 
@@ -77,6 +81,7 @@ java -cp out Menu.Principal
 Inside the `v1` folder:
 
 ```bash
+mkdir -p out
 javac -encoding UTF-8 -d out src/Algorithms/*.java src/Menu/*.java test/tests/*.java
 java -Djava.awt.headless=true -cp out tests.SortingTests
 ```
