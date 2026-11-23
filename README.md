@@ -19,11 +19,15 @@ To understand an algorithm I need to build something with it. I had been using P
 
 ## v2: AlgoScope (in progress)
 
-A rewrite in Java 21 that **animates** each algorithm step by step: every comparison, swap and write is recorded and can be played forwards and backwards, with live counters. Pathfinding on a grid (BFS, DFS, Dijkstra, A*) comes next.
+A rewrite in Java 21 that **animates** each algorithm step by step: every step is recorded and can be played forwards and backwards, with live counters. Two tabs: sorting and pathfinding.
 
 <img src="v2/docs/sorting.png" alt="AlgoScope halfway through Quick Sort on 300 values: the left and right ends are already sorted, the middle is still unsorted, and one bar is highlighted while it is compared with the pivot" width="100%">
 
 **Sorting:** Bubble, Insertion, Selection, Merge, Quick and Heap Sort, on random, sorted, reversed or few-unique inputs of 5 to 1,000 values. Changing the algorithm keeps the same input, so they can be compared on the same data.
+
+<img src="v2/docs/pathfinding.png" alt="AlgoScope after A* on a random map: the yellow path goes from S to G around most of the brown mud, the explored cells are blue and the frontier green" width="100%">
+
+**Pathfinding:** BFS, DFS, Dijkstra and A* on a grid with walls and mud (mud costs 5, open ground 1). Draw walls and mud with the mouse, drag the start and the goal, or generate a maze (carved with DFS) or a random map. On the map above, BFS finds a path of 64 steps that costs 140 because it walks through the mud; A* takes 70 steps around it for a cost of 78, exploring half as many cells.
 
 **Controls:** Play/pause (Space), one step forward or back (Right/Left), back to the start (Home), a progress bar to jump anywhere, and a speed from 1 to about 30,000 steps per second.
 

@@ -4,6 +4,7 @@ import algoscope.engine.TimelineTests;
 import algoscope.pathfinding.PathfindingTests;
 import algoscope.sorting.SortingTests;
 import algoscope.ui.PlaybackTests;
+import algoscope.ui.pathfinding.PathfindingUiTests;
 import algoscope.ui.sorting.SortingUiTests;
 
 /** Runs every test of AlgoScope. Exit code 1 if anything failed, for CI. */
@@ -17,6 +18,7 @@ public final class AllTests {
         PathfindingTests.run();
         PlaybackTests.run();
         SortingUiTests.run();
+        PathfindingUiTests.run();
 
         long millis = (System.nanoTime() - start) / 1_000_000;
         System.out.println();
