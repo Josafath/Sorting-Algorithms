@@ -1,6 +1,7 @@
 # Sorting Algorithms
 
 [![v1 tests](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml/badge.svg)](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml)
+[![v2 tests](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v2-tests.yml/badge.svg)](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v2-tests.yml)
 ![Java](https://img.shields.io/badge/java-8%20%7C%2021-orange)
 ![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
@@ -13,6 +14,25 @@ A Java Swing desktop app to see how five classic sorting algorithms work: **Bubb
 To understand an algorithm I need to build something with it. I had been using Python for a long time and this was my way to practice Java while learning how these algorithms really work.
 
 📐 **[How each algorithm works, with its complexity](v1/docs/ALGORITHMS.md)**
+
+---
+
+## v2: AlgoScope (in progress)
+
+A rewrite in Java 21 that **animates** each algorithm step by step: every comparison, swap and write is recorded and can be played forwards and backwards, with live counters. Pathfinding on a grid (BFS, DFS, Dijkstra, A*) comes next.
+
+<img src="v2/docs/sorting.png" alt="AlgoScope halfway through Quick Sort on 300 values: the left and right ends are already sorted, the middle is still unsorted, and one bar is highlighted while it is compared with the pivot" width="100%">
+
+**Sorting:** Bubble, Insertion, Selection, Merge, Quick and Heap Sort, on random, sorted, reversed or few-unique inputs of 5 to 1,000 values. Changing the algorithm keeps the same input, so they can be compared on the same data.
+
+**Controls:** Play/pause (Space), one step forward or back (Right/Left), back to the start (Home), a progress bar to jump anywhere, and a speed from 1 to about 30,000 steps per second.
+
+Requires **JDK 21**. Inside the `v2` folder:
+
+| | Windows | macOS / Linux |
+|---|---|---|
+| Open the app | `run.bat` | `./run.sh` |
+| Run the tests | `test.bat` | `./test.sh` |
 
 ---
 

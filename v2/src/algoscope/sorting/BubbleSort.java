@@ -12,6 +12,11 @@ public final class BubbleSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Compares neighbours and swaps them when they are out of order; the biggest values bubble up to the end.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n)", "O(n²)", "O(n²)");
     }

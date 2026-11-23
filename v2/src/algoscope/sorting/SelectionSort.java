@@ -13,6 +13,11 @@ public final class SelectionSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Finds the smallest value left and swaps it to the front. Many comparisons, very few swaps.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n²)", "O(n²)", "O(n²)");
     }

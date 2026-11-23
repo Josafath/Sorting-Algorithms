@@ -9,6 +9,9 @@ public interface SortAlgorithm {
     /** The name shown in the window, like "Merge Sort". */
     String name();
 
+    /** One sentence that explains the idea, shown under the menu. */
+    String description();
+
     /** Big-O time in the best, average and worst case, shown next to the name. */
     Complexity complexity();
 

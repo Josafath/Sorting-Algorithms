@@ -15,6 +15,11 @@ public final class HeapSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Arranges the values as a max-heap, then moves the biggest one to the end again and again.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n log n)", "O(n log n)", "O(n log n)");
     }

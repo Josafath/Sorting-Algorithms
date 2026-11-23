@@ -15,6 +15,11 @@ public final class QuickSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Splits the values around a pivot (smaller left, bigger right), then sorts each side.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n log n)", "O(n log n)", "O(n²)");
     }

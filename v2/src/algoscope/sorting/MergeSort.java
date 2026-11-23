@@ -13,6 +13,11 @@ public final class MergeSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Sorts each half, then merges the two sorted halves. Always O(n log n), but uses a helper array.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n log n)", "O(n log n)", "O(n log n)");
     }

@@ -13,6 +13,11 @@ public final class InsertionSort implements SortAlgorithm {
     }
 
     @Override
+    public String description() {
+        return "Takes each value and shifts the bigger ones to the right until it fits, like sorting cards in your hand.";
+    }
+
+    @Override
     public Complexity complexity() {
         return new Complexity("O(n)", "O(n²)", "O(n²)");
     }

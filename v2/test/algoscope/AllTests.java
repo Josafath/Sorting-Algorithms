@@ -2,6 +2,8 @@ package algoscope;
 
 import algoscope.engine.TimelineTests;
 import algoscope.sorting.SortingTests;
+import algoscope.ui.PlaybackTests;
+import algoscope.ui.sorting.SortingUiTests;
 
 /** Runs every test of AlgoScope. Exit code 1 if anything failed, for CI. */
 public final class AllTests {
@@ -11,12 +13,13 @@ public final class AllTests {
 
         TimelineTests.run();
         SortingTests.run();
+        PlaybackTests.run();
+        SortingUiTests.run();
 
         long millis = (System.nanoTime() - start) / 1_000_000;
         System.out.println();
         System.out.println(Check.passed() + " passed, " + Check.failed() + " failed (" + millis + " ms)");
-        if (Check.failed() > 0) {
-            System.exit(1);
-        }
+        // exit() also stops any Swing thread a test may have started
+        System.exit(Check.failed() > 0 ? 1 : 0);
     }
 }
