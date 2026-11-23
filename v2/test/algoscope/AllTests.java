@@ -1,6 +1,7 @@
 package algoscope;
 
 import algoscope.engine.TimelineTests;
+import algoscope.pathfinding.PathfindingTests;
 import algoscope.sorting.SortingTests;
 import algoscope.ui.PlaybackTests;
 import algoscope.ui.sorting.SortingUiTests;
@@ -13,6 +14,7 @@ public final class AllTests {
 
         TimelineTests.run();
         SortingTests.run();
+        PathfindingTests.run();
         PlaybackTests.run();
         SortingUiTests.run();
 
