@@ -1,0 +1,29 @@
+name: v1 tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # 8 is the version the NetBeans project targets, 21 is a current LTS
+        java: ['8', '21']
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: ${{ matrix.java }}
+      - name: Compile
+        run: javac -encoding UTF-8 -d out src/Algorithms/*.java src/Menu/*.java test/tests/*.java
+      - name: Run tests
+        run: java -Djava.awt.headless=true -cp out tests.SortingTests

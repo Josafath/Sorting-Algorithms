@@ -11,24 +11,21 @@ import Algorithms.Quick_Sort;
 import Algorithms.Merge_Sort;
 import Algorithms.Insertion_Sort;
 import Algorithms.Bubble_Sort;
+import java.awt.Cursor;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 public class Principal extends javax.swing.JFrame {
 
-    private final Quick_Sort Algo_QuickSort;
-    
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
-        Algo_QuickSort = new Quick_Sort();
-        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -207,57 +204,25 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFileChooser chooserfile = new JFileChooser();        
-        chooserfile.showOpenDialog(null);
-        try {
-            File file = chooserfile.getSelectedFile();
-            Scanner myReader = new Scanner(file);
-            String element="";
-            while(myReader.hasNextLine()){
-                element = myReader.nextLine();
-            }
-            String[] arrOfStr = element.split(",");
-            int [] Array = new int[arrOfStr.length];
-            int index = 0;
-            for(String e: arrOfStr){
-                Array[index] = Integer.parseInt(e);
-                index++;
-            }
-            String opcion = String.valueOf(Opciones.getSelectedItem());
-            if(opcion.equals("Bubble Sort")){
-                Bubble_Sort algo_bubble = new Bubble_Sort(Array);
-                algo_bubble.ordenar();
-                algo_bubble.writeArray(Array, Array.length);
-                
-            }
-            else if(opcion.equals("Insertion Sort")){
-                Insertion_Sort algo_insert = new Insertion_Sort(Array);
-                algo_insert.ordenar_insertion();
-                algo_insert.writeArray(Array, Array.length);
-            }
-            else if(opcion.equals("QuickSort")){
-                int n = Array.length-1;
-                Quick_Sort algo_quicksort = new Quick_Sort();
-                algo_quicksort.quickSort(Array, 0, n);
-                algo_quicksort.writeArray(Array, n);
-            }
-            else if(opcion.equals("Merge Sort")){
-                int n = Array.length-1;
-                Merge_Sort algo_merge = new Merge_Sort();
-                algo_merge.ordenar(Array, n, n);
-                algo_merge.writeArray(Array, n);
-            }
-            else if(opcion.equals("ShellSort")){
-                Shell_Sort algo_shell = new Shell_Sort();
-                algo_shell.ordenar(Array);
-                algo_shell.writeArray(Array, index);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        JFileChooser chooserfile = new JFileChooser();
+        chooserfile.setFileFilter(new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt"));
+        // Pressing "Cancelar" used to crash with a NullPointerException
+        if (chooserfile.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
         }
-        
+        File file = chooserfile.getSelectedFile();
+        int[] Array;
+        try {
+            Array = NumberIO.read(file);
+        } catch (IOException ex) {
+            showError("No se pudo leer el archivo:\n" + ex.getMessage());
+            return;
+        } catch (IllegalArgumentException ex) {
+            // Also catches NumberFormatException, a value that is not a number
+            showError(ex.getMessage());
+            return;
+        }
+        sortInBackground(Array, file);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void OpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcionesActionPerformed
@@ -269,67 +234,131 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_InputActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String opcion = String.valueOf(Opciones.getSelectedItem());
-        String datos = Input.getText();
-        if(datos.isEmpty()){
-            JOptionPane.showMessageDialog(null,"Campo Vacío ","E R R O R",JOptionPane.ERROR_MESSAGE);
+        int[] Array;
+        try {
+            Array = NumberIO.parse(Input.getText());
+        } catch (IllegalArgumentException ex) {
+            // Empty field, or a value like "a" or "3.5": tell the user instead of failing silently
+            showError(ex.getMessage());
+            return;
         }
-        else{
-            String[] arrOfStr = datos.split(",");
-            int[] Array = new int[arrOfStr.length];
-            for (int i = 0; i <arrOfStr.length; i++) {
-                Array[i] = Integer.parseInt(arrOfStr[i]);
-            }
-            if(opcion.equals("Bubble Sort")){
-                Bubble_Sort algo_bubble = new Bubble_Sort(Array);
-                long startTime = System.nanoTime();
-                algo_bubble.ordenar();
-                long stopTime = System.nanoTime();
-                Texto_Cantidad.setText((stopTime - startTime)+" Nanosegundos");
-                Ordenado_Label.setText("Resultado con " + opcion +": ");
-                Resultado_Ordenado.setText(algo_bubble.toString());
-        }
-            else if(opcion.equals("Insertion Sort")){
-                Insertion_Sort algo_insert = new Insertion_Sort(Array);
-                long startTime = System.nanoTime();
-                algo_insert.ordenar_insertion();
-                long stopTime = System.nanoTime();
-                Texto_Cantidad.setText((stopTime - startTime)+" Nanosegundos");
-                Ordenado_Label.setText("Resultado con " + opcion +": ");
-                Resultado_Ordenado.setText(algo_insert.toString());
-            }
-            else if(opcion.equals("QuickSort")){
-                int n = Array.length-1;
-                Quick_Sort algo_quicksort = new Quick_Sort();
-                long startTime = System.nanoTime();
-                algo_quicksort.quickSort(Array,0,n);
-                long stopTime = System.nanoTime();
-                Texto_Cantidad.setText((stopTime - startTime)+" Nanosegundos");
-                Ordenado_Label.setText("Resultado con " + opcion +": ");
-                Resultado_Ordenado.setText(algo_quicksort.printArray(Array, n));
-            }
-            else if(opcion.equals("Merge Sort")){
-                int n = Array.length-1;
-                Merge_Sort algo_merge = new Merge_Sort();
-                long startTime = System.nanoTime();
-                algo_merge.ordenar(Array,0,n);
-                long stopTime = System.nanoTime();
-                Texto_Cantidad.setText((stopTime - startTime)+" Nanosegundos");
-                Ordenado_Label.setText("Resultado con " + opcion +": ");
-                Resultado_Ordenado.setText(algo_merge.printArray(Array, n));
-            }
-            else if(opcion.equals("ShellSort")){
-                Shell_Sort algo_shell = new Shell_Sort();
-                long startTime = System.nanoTime();
-                algo_shell.ordenar(Array);
-                long stopTime = System.nanoTime();
-                Texto_Cantidad.setText((stopTime - startTime)+" Nanosegundos");
-                Ordenado_Label.setText("Resultado con " + opcion +": ");
-                Resultado_Ordenado.setText(algo_shell.printArray(Array, Array.length));
-            }
-        }
-        
+        sortInBackground(Array, null);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * Runs the algorithm chosen in the combo box over the array.
+     * Both buttons use this, so the text field and the file sort the same way
+     * (the file button used to call Merge Sort with the wrong indexes).
+     */
+    public static void sort(String opcion, int[] Array) {
+        switch (opcion) {
+            case "Bubble Sort":
+                new Bubble_Sort(Array).ordenar();
+                break;
+            case "Insertion Sort":
+                new Insertion_Sort(Array).ordenar_insertion();
+                break;
+            case "QuickSort":
+                new Quick_Sort().quickSort(Array, 0, Array.length - 1);
+                break;
+            case "Merge Sort":
+                new Merge_Sort().ordenar(Array, 0, Array.length - 1);
+                break;
+            case "ShellSort":
+                new Shell_Sort().ordenar(Array);
+                break;
+            default:
+                throw new IllegalArgumentException("Algoritmo desconocido: " + opcion);
+        }
+    }
+
+    /**
+     * Sorts in a background thread so the window does not freeze with big files,
+     * then shows the time and either the result (text field) or a save dialog (file).
+     *
+     * @param source the file the numbers came from, or null if they were typed
+     */
+    private void sortInBackground(final int[] Array, final File source) {
+        final String opcion = String.valueOf(Opciones.getSelectedItem());
+        setBusy(true);
+        new SwingWorker<Long, Void>() {
+            @Override
+            protected Long doInBackground() {
+                long startTime = System.nanoTime();
+                sort(opcion, Array);
+                long stopTime = System.nanoTime();
+                return stopTime - startTime;
+            }
+
+            @Override
+            protected void done() {
+                // done() runs back on the Swing thread, where it is safe to touch the window
+                setBusy(false);
+                long elapsed;
+                try {
+                    elapsed = get();
+                } catch (InterruptedException | ExecutionException ex) {
+                    Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+                    showError("No se pudo ordenar: " + cause);
+                    return;
+                }
+                Texto_Cantidad.setText(elapsed + " Nanosegundos");
+                Ordenado_Label.setText("Resultado con " + opcion + ": ");
+                if (source == null) {
+                    Resultado_Ordenado.setText(Arrays.toString(Array));
+                } else {
+                    saveResult(opcion, Array, source);
+                }
+            }
+        }.execute();
+    }
+
+    /**
+     * Asks where to save the sorted file. It used to be written to
+     * C:\Users\<user>\Desktop, which only exists on Windows.
+     */
+    private void saveResult(String opcion, int[] Array, File source) {
+        // Suggest a name next to the original file: numbers.txt -> numbers_MergeSort.txt
+        String name = source.getName().replaceFirst("\\.txt$", "");
+        File suggested = new File(source.getParentFile(), name + "_" + opcion.replace(" ", "") + ".txt");
+        JFileChooser chooser = new JFileChooser(source.getParentFile());
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt"));
+        chooser.setSelectedFile(suggested);
+        if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            Resultado_Ordenado.setText(Array.length + " números ordenados. No se guardó el archivo.");
+            return;
+        }
+        File target = chooser.getSelectedFile();
+        if (!target.getName().contains(".")) {
+            target = new File(target.getParentFile(), target.getName() + ".txt");
+        }
+        // Never overwrite the input file or an existing file without asking
+        if (target.exists() && JOptionPane.showConfirmDialog(this,
+                "El archivo " + target.getName() + " ya existe. ¿Reemplazarlo?",
+                "Confirmar", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            Resultado_Ordenado.setText(Array.length + " números ordenados. No se guardó el archivo.");
+            return;
+        }
+        try {
+            NumberIO.write(target, opcion, Array);
+        } catch (IOException ex) {
+            showError("No se pudo guardar el archivo:\n" + ex.getMessage());
+            return;
+        }
+        Resultado_Ordenado.setText(Array.length + " números ordenados y guardados en:\n" + target.getAbsolutePath());
+    }
+
+    /** Disables the controls while sorting so the user cannot start two sorts at once. */
+    private void setBusy(boolean busy) {
+        jButton1.setEnabled(!busy);
+        jButton2.setEnabled(!busy);
+        Opciones.setEnabled(!busy);
+        setCursor(busy ? Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) : Cursor.getDefaultCursor());
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "E R R O R", JOptionPane.ERROR_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments

@@ -5,12 +5,6 @@
  */
 package Algorithms;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author Tec
@@ -46,20 +40,5 @@ public class Shell_Sort {
             }
         }
         return arr;
-    }
-    public String printArray(int[] array,int size){
-        return Arrays.toString(array);
-    }
-    public void writeArray(int[] arr, int size) throws IOException {
-        String user= System.getProperty("user.name");
-        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\"+user+"\\Desktop\\Shell_Sort.txt", true));
-        writer.write("Ordenado con Shell Sort");
-        writer.append("\n");
-        for (int i = 0; i < size; i++) {
-            writer.write(String.valueOf(arr[i]));
-            writer.append("\n");
-        }
-        writer.close();
-        JOptionPane.showMessageDialog(null, "El archivo ordenado está en el Escritorio");
     }
 }

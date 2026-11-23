@@ -1,0 +1,15 @@
+# NetBeans / Ant output
+build/
+dist/
+
+# NetBeans settings of each computer (paths like C:\Users\<name>)
+nbproject/private/
+
+# Compiled classes and test output
+*.class
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+/v1/nbproject/private/
