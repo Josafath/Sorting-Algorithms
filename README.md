@@ -1,48 +1,110 @@
-# Sorting Algorithms
+# AlgoScope · Sorting Algorithms
 
-[![v1 tests](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml/badge.svg)](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml)
 [![v2 tests](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v2-tests.yml/badge.svg)](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v2-tests.yml)
-![Java](https://img.shields.io/badge/java-8%20%7C%2021-orange)
+[![v1 tests](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml/badge.svg)](https://github.com/Josafath/Sorting-Algorithms/actions/workflows/v1-tests.yml)
+![Java](https://img.shields.io/badge/java-21%20(v2)%20%7C%208%20(v1)-orange)
 ![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
-A Java Swing desktop app to see how five classic sorting algorithms work: **Bubble Sort, Insertion Sort, QuickSort, Merge Sort and Shell Sort**. Type some numbers or open a `.txt` file, choose an algorithm and the app sorts them and shows how long it took.
+A Java desktop app that **animates algorithms step by step**: six sorting algorithms on bars, and BFS, DFS, Dijkstra and A* finding their way through a maze. Every step is recorded, so the animation can be played forwards and backwards, paused, or jumped to any point, with live counters of what the algorithm is doing.
 
-<img src="v1/docs/preview.png" alt="The window: a text field for the numbers, the algorithm list, the Abrir Archivo and Ejecutar Algoritmo buttons, the execution time and the sorted result" width="100%">
+<img src="v2/docs/sorting.gif" alt="Quick Sort on 120 bars: the compared bar turns amber and the swapped ones red while the array gets sorted piece by piece, and at the end every bar turns green" width="100%">
+
+<img src="v2/docs/pathfinding.gif" alt="A* on a random map with walls and brown mud: the explored blue area grows from S towards G, then a yellow path appears that goes around most of the mud" width="100%">
 
 ## Why this project
 
-To understand an algorithm I need to build something with it. I had been using Python for a long time and this was my way to practice Java while learning how these algorithms really work.
+To understand an algorithm I need to build something with it. I had been using Python for a long time and this started as my way to practice Java. The project exists in two versions, written years apart, and both are kept so the difference is visible:
 
-📐 **[How each algorithm works, with its complexity](v1/docs/ALGORITHMS.md)**
+| | [v1](v1/) (original) | [v2](v2/) AlgoScope |
+|---|---|---|
+| **What it does** | Sorts the numbers you type and shows the time | **Animates** each algorithm step by step, forwards and backwards |
+| **Algorithms** | 5 sorting | **6 sorting + 4 pathfinding** (BFS, DFS, Dijkstra, A*) + a maze generator |
+| **What it measures** | One time in nanoseconds (JIT noise included) | **Comparisons, swaps and writes**; cells explored, path steps and cost |
+| **Inputs** | Typed numbers or a `.txt` file | Random, sorted, reversed or few-unique arrays; mazes, random maps or your own drawing |
+| **Interface** | NetBeans GUI Builder, Spanish, Windows-only fonts | Hand-written Swing, English, the same on every system |
+| **Java** | 8 | **21**: records, sealed interfaces, pattern matching `switch` |
+| **Dependencies** | None | None, not even for tests |
+| **Tests** | 94 (added when fixing it) | **344**, including the UI without a screen |
+
+📐 **[How v2 is built](v2/docs/ARCHITECTURE.md)**: record once and replay, the packages, the playback clock, the limits, and how it is tested.
+
+📚 **[The algorithms](v2/docs/ALGORITHMS.md)**: how each one works, with real numbers from the app, and why one small tie-break makes A* explore 59 cells instead of 900.
 
 ---
 
-## v2: AlgoScope (in progress)
+## v2: AlgoScope
 
-A rewrite in Java 21 that **animates** each algorithm step by step: every step is recorded and can be played forwards and backwards, with live counters. Two tabs: sorting and pathfinding.
+### Sorting
 
-<img src="v2/docs/sorting.png" alt="AlgoScope halfway through Quick Sort on 300 values: the left and right ends are already sorted, the middle is still unsorted, and one bar is highlighted while it is compared with the pivot" width="100%">
+Bubble, Insertion, Selection, Merge, Quick and Heap Sort, on **random, already sorted, reversed or few-unique** inputs of 5 to 1,000 values. Bars turn **amber** when compared, **red** when swapped, **blue** when written, and **green** when everything is sorted. Below the bars, the current step in words ("Comparing #3 (48) and #4 (16)") and the counters.
 
-**Sorting:** Bubble, Insertion, Selection, Merge, Quick and Heap Sort, on random, sorted, reversed or few-unique inputs of 5 to 1,000 values. Changing the algorithm keeps the same input, so they can be compared on the same data.
+Changing the algorithm keeps the same input, so they can be compared on exactly the same data: on 100 random values Bubble Sort makes 4,935 comparisons and Merge Sort 596.
 
-<img src="v2/docs/pathfinding.png" alt="AlgoScope after A* on a random map: the yellow path goes from S to G around most of the brown mud, the explored cells are blue and the frontier green" width="100%">
+### Pathfinding
 
-**Pathfinding:** BFS, DFS, Dijkstra and A* on a grid with walls and mud (mud costs 5, open ground 1). Draw walls and mud with the mouse, drag the start and the goal, or generate a maze (carved with DFS) or a random map. On the map above, BFS finds a path of 64 steps that costs 140 because it walks through the mud; A* takes 70 steps around it for a cost of 78, exploring half as many cells.
+BFS, DFS, Dijkstra and A* on a grid with **walls** and **mud** (entering mud costs 5, open ground 1). The frontier is **green**, explored cells **blue**, and the path **yellow**.
 
-**Controls:** Play/pause (Space), one step forward or back (Right/Left), back to the start (Home), a progress bar to jump anywhere, and a speed from 1 to about 30,000 steps per second.
+- **Draw** walls or mud by dragging the mouse; right-drag erases; drag the **S** or the **G** to move the start or the goal.
+- **Generate** a maze (carved with DFS, with a few loops) or a random map, in three sizes.
 
-Requires **JDK 21**. Inside the `v2` folder:
+Mud is what makes the algorithms differ. On the map of the animation above, BFS finds the path with the fewest steps (64) but it costs 140 because it walks straight through the mud; A* goes around it in 70 steps for a cost of 78, exploring half as many cells.
+
+### Controls
+
+| Action | Key |
+|---|---|
+| Play / pause | Space |
+| One step forward / back | Right / Left |
+| Back to the start | Home |
+| Jump anywhere | Drag the progress bar |
+| Speed, from 1 to ~30,000 steps per second | Speed slider |
+
+### Requirements
+
+**JDK 21 or newer.**
+- **Windows:** install [Eclipse Temurin 21](https://adoptium.net/) and check *Set JAVA_HOME* and *Add to PATH* in the installer.
+- **macOS:** install Temurin 21 from the same page, or with Homebrew: `brew install --cask temurin@21`.
+- **Linux:** your distribution's OpenJDK 21 (for example `sudo apt install openjdk-21-jdk`).
+
+Check it with `java -version` and `javac -version`.
+
+### Run it
+
+Inside the `v2` folder:
 
 | | Windows | macOS / Linux |
 |---|---|---|
 | Open the app | `run.bat` | `./run.sh` |
 | Run the tests | `test.bat` | `./test.sh` |
 
+The scripts compile into `v2/out` and need nothing else. The tests run without opening any window, also on GitHub Actions for Windows, macOS and Linux.
+
+### Project structure
+
+```
+v2/
+├── src/algoscope/
+│   ├── engine/         Step and Timeline: record once, replay forwards and backwards
+│   ├── sorting/        The six sorting algorithms and the array that records them
+│   ├── pathfinding/    Grid, BFS, DFS, Dijkstra, A*, maze and random map generators
+│   └── ui/             The window, the shared player and playback bar
+│       ├── sorting/        Sorting tab
+│       └── pathfinding/    Pathfinding tab
+├── test/algoscope/     344 tests with a small runner of our own (Check, AllTests)
+├── docs/               ARCHITECTURE.md, ALGORITHMS.md and the animations
+├── run.sh / run.bat    Compile and open the app
+└── test.sh / test.bat  Compile and run the tests
+```
+
 ---
 
 ## v1
 
 The original project, with its bugs fixed and nothing redesigned. The interface is in Spanish, as it was built.
+
+<img src="v1/docs/preview.png" alt="The v1 window: a text field for the numbers, the algorithm list, the Abrir Archivo and Ejecutar Algoritmo buttons, the execution time and the sorted result" width="100%">
+
+📐 **[How the five v1 algorithms work](v1/docs/ALGORITHMS.md)**
 
 ### How to use it
 
@@ -100,7 +162,7 @@ java -cp out Menu.Principal
 
 ### Tests
 
-94 checks with no external library, only the JDK: every algorithm against `Arrays.sort` (empty arrays, one element, repeated and negative values, `Integer.MIN_VALUE`/`MAX_VALUE`, random arrays), QuickSort with 200,000 sorted, reversed and equal numbers, and the reading and writing of numbers. They run on Windows, macOS and Linux with Java 8 and 21 on every push.
+94 checks with no external library, only the JDK: every algorithm against `Arrays.sort` (empty arrays, one element, repeated and negative values, `Integer.MIN_VALUE`/`MAX_VALUE`, random arrays), QuickSort with 200,000 sorted, reversed and equal numbers, and the reading and writing of numbers. They run on Windows, macOS and Linux with Java 8 and 21 on every pull request.
 
 Inside the `v1` folder:
 
